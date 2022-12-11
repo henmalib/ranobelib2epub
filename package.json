@@ -1,6 +1,6 @@
 {
   "name": "ranobelib2epub",
-  "version": "0.3",
+  "version": "1.0.0",
   "description": "",
   "main": "./build/index.js",
   "scripts": {
