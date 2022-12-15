@@ -9,7 +9,7 @@ export interface Metadata {
   year: string;
   creator: MetadataAuthor[];
   chapters: number;
-  publisher: string[];
+  publisher: string;
   coverUrl: string;
   title: string;
 }
@@ -66,23 +66,22 @@ const collectMetadataEvaluate = async (counterSelector: string) => {
     return [];
   };
 
-  const publisher: ParseFunc<string[]> = (side, title) => {
+  const publisher: ParseFunc<string> = (side, title) => {
     if (title === 'Издательство') {
       const publishers = side.querySelectorAll(
         '.media-info-list__value a'
       )! as NodeListOf<HTMLAreaElement>;
 
-      return [...publishers].map(p => p.innerHTML);
+      return [...publishers].map(p => p.innerHTML).join(', ');
     }
 
-    return [];
+    return '';
   };
 
   const sideInfo = document.querySelectorAll(counterSelector);
   // @ts-ignore
   const info: Metadata = {
     creator: [],
-    publisher: [],
     title: (document.querySelector('.media-name__main') as HTMLSpanElement)!
       .innerText,
     coverUrl: (document.querySelector(
@@ -99,6 +98,7 @@ const collectMetadataEvaluate = async (counterSelector: string) => {
 
     info.chapters ??= await loadedChapters(side, title)!;
     info.year ??= await yearOfRealize(side, title)!;
+    info.publisher ??= await publisher(side, title)!;
 
     for (const data of await Promise.all([
       authors(side, title)!,
@@ -106,8 +106,6 @@ const collectMetadataEvaluate = async (counterSelector: string) => {
     ])) {
       info.creator.push(...data);
     }
-
-    info.publisher.push(...(await publisher(side, title)!));
   }
 
   return info;

@@ -4,6 +4,7 @@
 * `npm run build`
 
 ## Start
+### ! You should have [pandoc](https://pandoc.org/installing.html) installed and added to your PATH
 * npm run start *Link to ranobe*
   * Example: npm run start https://ranobelib.me/omniscient-readers-viewpoint-novel?section=info
 

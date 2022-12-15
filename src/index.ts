@@ -47,14 +47,18 @@ const main = async ({ ranobeUrl }: MainProps) => {
 };
 
 const parseArgsAndStart = async () => {
-  const ranobeUrl = process.argv[2];
+  let ranobeUrl = process.argv[2];
 
   if (!ranobeUrl.startsWith('https://ranobelib.me')) {
     throw new Error('This program supports only ranobelib.me');
   }
 
+  if (ranobeUrl.indexOf('?') !== -1) {
+    ranobeUrl = ranobeUrl.slice(0, ranobeUrl.indexOf('?'));
+  }
+
   return await main({
-    ranobeUrl: ranobeUrl.slice(0, ranobeUrl.indexOf('?'))
+    ranobeUrl
   });
 };
 

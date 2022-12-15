@@ -17,7 +17,8 @@ export const generateEpubMetadata = (metadata: Metadata, coverPath: string) => {
       : undefined,
     publisher: metadata.publisher.length ? metadata.publisher : undefined,
     lang: 'ru',
-    'cover-image': coverPath
+    // Fix for windows
+    'cover-image': coverPath.replaceAll('\\', '/')
   };
 
   return `

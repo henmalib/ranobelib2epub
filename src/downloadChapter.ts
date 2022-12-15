@@ -3,6 +3,7 @@ import { writeFileSync, mkdirSync } from 'fs';
 import { Page } from 'puppeteer';
 import { Chapter } from './getChapters';
 import config from './config';
+import markdownEscape from 'markdown-escape';
 
 export const downloadChapter = async (
   page: Page,
@@ -23,13 +24,19 @@ export const downloadChapter = async (
       contentSelector
     ) as NodeListOf<HTMLParagraphElement>;
 
-    return [...paragraph].map(p => p.outerHTML);
+    return [...paragraph].map(p => p.innerText);
   }, contentSelector);
 
   const folderPath = path.join(config.chaptersDir, folder);
   mkdirSync(folderPath, { recursive: true });
   writeFileSync(
     path.join(folderPath, chapter.title + '.txt'),
-    content.join('\n')
+    content
+      .map(v => {
+        const value = markdownEscape(v).replaceAll(/d/g, '\\$&');
+
+        return `<p>${value}</p>`;
+      })
+      .join('\n')
   );
 };
