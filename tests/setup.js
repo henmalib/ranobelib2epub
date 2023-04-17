@@ -2,6 +2,7 @@ const { mkdir, writeFile } = require('fs').promises;
 const os = require('os');
 const path = require('path');
 const puppeteer = require('puppeteer-extra');
+const chromium = require('chromium');
 
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
@@ -13,8 +14,7 @@ puppeteer.use(StealthPlugin());
 
 module.exports = async function () {
   const browser = await puppeteer.launch({
-    executablePath: '/usr/bin/chromium'
-    // headless: false
+    executablePath: chromium.path
   });
   // store the browser instance so we can teardown it later
   // this global is only available in the teardown but not in TestEnvironments

@@ -6,7 +6,8 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker';
 import { collectMetadata } from './collectMetadata';
 import { makeEpub } from './makeEpub';
-import config from './config';
+// @ts-ignore
+import * as chromium from 'chromium';
 
 puppeteer.use(AdblockerPlugin({ blockTrackers: true }));
 puppeteer.use(StealthPlugin());
@@ -17,8 +18,8 @@ interface MainProps {
 
 const main = async ({ ranobeUrl }: MainProps) => {
   const browser = await puppeteer.launch({
-    headless: config.headless,
-    executablePath: config.executablePath
+    headless: process.env.HEADLESS?.toLowerCase() !== 'false',
+    executablePath: chromium.path
   });
   const page = await browser.newPage();
   await page.setViewport({

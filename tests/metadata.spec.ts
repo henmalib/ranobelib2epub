@@ -23,7 +23,7 @@ describe('Info collecting', () => {
 
   it('should have right data', async () => {
     const coverUrl =
-      'https://ranobelib.me/uploads/cover/omniscient-readers-viewpoint-novel/cover/N5x2PI83zwtG_250x350.jpg';
+      'https://cover.imglib.info/uploads/cover/omniscient-readers-viewpoint-novel/cover/N5x2PI83zwtG_250x350.jpg';
     const chapterCount = 550;
     const year = '2018';
     const title = 'Точка зрения Всеведущего читателя (Новелла)';
@@ -53,7 +53,7 @@ describe('Info collecting', () => {
         chapters: 550,
         coverUrl: 'https://cataas.com/cat/cute',
         creator: [],
-        publisher: [],
+        publisher: '',
         title: 'Cat Book',
         year: '2022'
       },

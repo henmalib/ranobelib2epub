@@ -96,9 +96,9 @@ const collectMetadataEvaluate = async (counterSelector: string) => {
 
     const title = titleElement.innerText;
 
-    info.chapters ??= await loadedChapters(side, title)!;
-    info.year ??= await yearOfRealize(side, title)!;
-    info.publisher ??= await publisher(side, title)!;
+    info.chapters ||= await loadedChapters(side, title)!;
+    info.year ||= await yearOfRealize(side, title)!;
+    info.publisher ||= await publisher(side, title)!;
 
     for (const data of await Promise.all([
       authors(side, title)!,
