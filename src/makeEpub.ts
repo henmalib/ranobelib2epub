@@ -8,9 +8,9 @@ import {
 import path from 'path';
 import { spawn } from 'child_process';
 import { Metadata } from './collectMetadata';
-import config from './config';
 import { generateEpubMetadata } from './generateEpubMetadata';
 import fetch from 'node-fetch';
+import { chaptersPath } from './consts';
 
 const generateFullFile = async (chapterDir: string) => {
   const regexp = /Глава\s*([\d.]+).+/;
@@ -62,10 +62,7 @@ const downloadCover = async (coverUrl: string, pathToSave: string) => {
 };
 
 export const makeEpub = async (metadata: Metadata) => {
-  const ranobePath = path.join(
-    config.chaptersDir,
-    createFolderName(metadata.title)
-  );
+  const ranobePath = path.join(chaptersPath, createFolderName(metadata.title));
   const coverPath = path.join(ranobePath, 'cover.jpg');
 
   const epubMeta = generateEpubMetadata(metadata, coverPath);

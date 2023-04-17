@@ -2,8 +2,8 @@ import path from 'path';
 import { writeFileSync, mkdirSync } from 'fs';
 import { Page } from 'puppeteer';
 import { Chapter } from './getChapters';
-import config from './config';
 import markdownEscape from 'markdown-escape';
+import { chaptersPath } from './consts';
 
 export const downloadChapter = async (
   page: Page,
@@ -27,7 +27,7 @@ export const downloadChapter = async (
     return [...paragraph].map(p => p.innerText);
   }, contentSelector);
 
-  const folderPath = path.join(config.chaptersDir, folder);
+  const folderPath = path.join(chaptersPath, folder);
   mkdirSync(folderPath, { recursive: true });
   writeFileSync(
     path.join(folderPath, chapter.title + '.txt'),
