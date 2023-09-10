@@ -13,23 +13,41 @@ import fetch from 'node-fetch';
 import { chaptersPath } from './consts';
 
 const generateFullFile = async (chapterDir: string) => {
-  const regexp = /Глава\s*([\d.]+).+/;
-  const chapters = readdirSync(chapterDir)
-    .filter(v => regexp.test(v))
-    .sort((a, b) => {
-      const aNum = +a.match(regexp)![1];
-      const bNum = +b.match(regexp)![1];
+  const chapterRegExp = /Глава\s*([\d.]+).+/;
+  const volumeRegExp = /Том\s*([\d.]+).+/i;
+  const volumes: string[][] = [];
 
-      return aNum - bNum;
+  for (const file of readdirSync(chapterDir).filter(
+    f => f.endsWith('.txt') && f !== 'result.txt'
+  )) {
+    const volume = +file.match(volumeRegExp)![1];
+
+    volumes[volume] ||= [];
+    volumes[volume].push(file);
+  }
+
+  for (let i = 0; i < volumes.length; i++) {
+    if (!volumes[i]) continue;
+
+    volumes[i].sort((a, b) => {
+      const aChapter = +a.match(chapterRegExp)![1];
+      const bChapter = +b.match(chapterRegExp)![1];
+
+      return aChapter - bChapter;
     });
+  }
 
   let result = '';
 
-  for (const chapter of chapters) {
-    const page = readFileSync(path.join(chapterDir, chapter), 'utf-8');
+  for (const volume of volumes) {
+    if (!volume) continue;
 
-    result += `\n\n# ${chapter.replace('.txt', '')} {epub:type=keywords}\n\n`;
-    result += page;
+    for (const chapter of volume) {
+      const page = readFileSync(path.join(chapterDir, chapter), 'utf-8');
+
+      result += `\n\n# ${chapter.replace('.txt', '')} {epub:type=keywords}\n\n`;
+      result += page;
+    }
   }
 
   return result;
